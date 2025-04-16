@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface TokenFilterProps {
   activeFilter: number | null;
@@ -8,12 +9,14 @@ interface TokenFilterProps {
 }
 
 const TokenFilter: React.FC<TokenFilterProps> = ({ activeFilter, onFilterChange }) => {
+  const { t } = useLanguage();
+  
   const filterOptions = [
-    { label: 'All Tokens', value: null },
-    { label: '4000+ Tokens', value: 4000 },
-    { label: '10000+ Tokens', value: 10000 },
-    { label: '20000+ Tokens', value: 20000 },
-    { label: '50000+ Tokens', value: 50000 }
+    { label: t.filters.all, value: null },
+    { label: t.filters.tokens4000, value: 4000 },
+    { label: t.filters.tokens10000, value: 10000 },
+    { label: t.filters.tokens20000, value: 20000 },
+    { label: t.filters.tokens50000, value: 50000 }
   ];
 
   return (

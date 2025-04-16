@@ -12,6 +12,8 @@ import {
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Skeleton } from '@/components/ui/skeleton';
 
+import { useLanguage } from '@/contexts/LanguageContext';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 import SearchBar from '@/components/SearchBar';
 import TokenFilter from '@/components/TokenFilter';
 import TokenOfferCard from '@/components/TokenOfferCard';
@@ -26,6 +28,7 @@ import {
 } from '@/services/tokenService';
 
 const Index = () => {
+  const { t, dir } = useLanguage();
   const [offers, setOffers] = useState<TokenOffer[]>([]);
   const [filteredOffers, setFilteredOffers] = useState<TokenOffer[]>([]);
   const [historicalPrices, setHistoricalPrices] = useState<HistoricalPrice[]>([]);
@@ -111,16 +114,20 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-jawaker-darkBg pb-16">
+    <div className={`min-h-screen bg-jawaker-darkBg pb-16 ${dir === 'rtl' ? 'text-right' : 'text-left'}`}>
+      {/* Header with Language Switcher */}
+      <div className="absolute top-4 right-4 z-10">
+        <LanguageSwitcher />
+      </div>
+      
       {/* Hero Header */}
       <header className="bg-gradient-to-r from-jawaker-charcoal to-jawaker-darkBg pt-16 pb-8 px-4">
         <div className="container max-w-6xl mx-auto">
           <h1 className="text-3xl md:text-4xl font-bold text-white text-center mb-4">
-            Buy Jawaker Token Gift Card - Compare Prices
+            {t.header.title}
           </h1>
           <p className="text-jawaker-gray text-center max-w-3xl mx-auto mb-8">
-            Find the best prices for Jawaker Token Gift Cards from trusted stores. 
-            Compare offers, check historical prices, and get the best deal for your Jawaker tokens.
+            {t.header.subtitle}
           </p>
           
           {/* Search Bar */}
@@ -145,20 +152,20 @@ const Index = () => {
           <Card className="bg-jawaker-charcoal border-white/10">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                Lowest Historical Price
+                {t.cards.lowestPrice}
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger>
                       <Info size={16} className="text-jawaker-gray" />
                     </TooltipTrigger>
                     <TooltipContent>
-                      <p>The lowest recorded price for Jawaker tokens</p>
+                      <p>{t.cards.lowestPriceTooltip}</p>
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
               </CardTitle>
               <CardDescription className="text-jawaker-gray">
-                The best price we've seen so far
+                {t.cards.bestPriceSeen}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -170,7 +177,7 @@ const Index = () => {
                     {lowestPrice.currency}{lowestPrice.value.toFixed(2)}
                   </div>
                   <div className="text-sm text-jawaker-gray">
-                    Recorded on {new Date(lowestPrice.date).toLocaleDateString()}
+                    {t.cards.recordedOn} {new Date(lowestPrice.date).toLocaleDateString(dir === 'rtl' ? 'ar-SA' : 'en-US')}
                   </div>
                 </div>
               )}
@@ -179,9 +186,12 @@ const Index = () => {
           
           {/* Price Chart Card */}
           <Card className="bg-jawaker-charcoal border-white/10">
+            <CardHeader>
+              <CardTitle>{t.cards.priceHistory}</CardTitle>
+            </CardHeader>
             <CardContent className="p-0">
               {loading || historicalPrices.length === 0 ? (
-                <div className="h-64 flex items-center justify-center">
+                <div className="h-48 flex items-center justify-center">
                   <Skeleton className="h-48 w-full bg-jawaker-gray/20" />
                 </div>
               ) : (
@@ -195,15 +205,15 @@ const Index = () => {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bold text-white">
-              Jawaker Token Offers
+              {t.offers.title}
             </h2>
             <Button 
               variant="outline" 
               className="border-jawaker-gray/30 text-jawaker-gray hover:text-white"
               onClick={handleSort}
             >
-              <ArrowDownUp className="mr-2 h-4 w-4" />
-              Sort by Price {sortDirection === 'asc' ? '(Low to High)' : '(High to Low)'}
+              <ArrowDownUp className={`${dir === 'rtl' ? 'ml-2' : 'mr-2'} h-4 w-4`} />
+              {t.offers.sortByPrice} {sortDirection === 'asc' ? t.offers.lowToHigh : t.offers.highToLow}
             </Button>
           </div>
           
@@ -218,14 +228,14 @@ const Index = () => {
           ) : filteredOffers.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-jawaker-gray text-lg">
-                No token offers found matching your criteria.
+                {t.offers.noOffersFound}
               </p>
               <Button 
                 variant="outline" 
                 className="mt-4 border-jawaker-purple text-jawaker-purple hover:bg-jawaker-purple hover:text-white"
                 onClick={() => handleTokenFilter(null)}
               >
-                Clear Filters
+                {t.offers.clearFilters}
               </Button>
             </div>
           ) : (
@@ -239,29 +249,32 @@ const Index = () => {
         
         {/* Additional Info Section */}
         <div className="bg-jawaker-charcoal rounded-lg p-6 border border-white/10">
-          <h2 className="text-xl font-bold text-white mb-4">About Jawaker Token Gift Cards</h2>
+          <h2 className="text-xl font-bold text-white mb-4">{t.about.title}</h2>
           <div className="prose prose-invert prose-sm max-w-none">
             <p className="text-jawaker-gray">
-              Jawaker Tokens are the in-game currency used in Jawaker, the popular Middle Eastern card game platform. 
-              With these tokens, players can participate in various card games, enter tournaments, and unlock special features.
+              {t.about.paragraph1}
             </p>
             <p className="text-jawaker-gray mt-4">
-              Purchasing a Jawaker Token Gift Card allows you to add tokens to your Jawaker account balance. 
-              Different gift cards offer various token amounts, allowing you to choose the option that best suits your gaming needs.
+              {t.about.paragraph2}
             </p>
             <p className="text-jawaker-gray mt-4">
-              Our price comparison tool helps you find the best deals from trusted online retailers, 
-              ensuring you get the most value for your money when purchasing Jawaker Tokens.
+              {t.about.paragraph3}
             </p>
           </div>
         </div>
       </main>
       
-      {/* Footer */}
+      {/* Footer with Export Instructions */}
       <footer className="mt-16 py-6 bg-jawaker-charcoal border-t border-white/10">
         <div className="container max-w-6xl mx-auto px-4 text-center text-jawaker-gray text-sm">
-          <p>© 2025 Jawaker Token Deal Seeker. All prices are updated regularly.</p>
-          <p className="mt-2">This is a demonstration price comparison website and is not affiliated with Jawaker.</p>
+          <p>{t.footer.copyright}</p>
+          <p className="mt-2">{t.footer.disclaimer}</p>
+          
+          {/* Export Instructions */}
+          <div className="mt-6 p-4 bg-jawaker-darkBg rounded-lg border border-white/10 max-w-xl mx-auto">
+            <h3 className="text-white font-bold mb-2">{t.footer.exportTitle}</h3>
+            <p className="text-jawaker-gray text-sm">{t.footer.exportInstructions}</p>
+          </div>
         </div>
       </footer>
     </div>

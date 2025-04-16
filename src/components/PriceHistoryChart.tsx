@@ -2,16 +2,19 @@
 import React from 'react';
 import { HistoricalPrice } from '@/data/jawaker-tokens';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface PriceHistoryChartProps {
   data: HistoricalPrice[];
 }
 
 const PriceHistoryChart: React.FC<PriceHistoryChartProps> = ({ data }) => {
+  const { dir } = useLanguage();
+  
   // Format date for display
   const formattedData = data.map(item => ({
     ...item,
-    formattedDate: new Date(item.date).toLocaleDateString('en-US', {
+    formattedDate: new Date(item.date).toLocaleDateString(dir === 'rtl' ? 'ar-SA' : 'en-US', {
       month: 'short',
       day: 'numeric'
     })
@@ -19,8 +22,7 @@ const PriceHistoryChart: React.FC<PriceHistoryChartProps> = ({ data }) => {
 
   return (
     <div className="w-full h-64 bg-jawaker-charcoal rounded-lg p-4">
-      <h3 className="text-white text-lg font-semibold mb-4">Price History</h3>
-      <ResponsiveContainer width="100%" height="80%">
+      <ResponsiveContainer width="100%" height="100%">
         <LineChart
           data={formattedData}
           margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
@@ -29,18 +31,21 @@ const PriceHistoryChart: React.FC<PriceHistoryChartProps> = ({ data }) => {
           <XAxis 
             dataKey="formattedDate" 
             stroke="#8E9196"
-            tick={{ fill: '#8E9196', fontSize: 12 }} 
+            tick={{ fill: '#8E9196', fontSize: 12 }}
+            reversed={dir === 'rtl'}
           />
           <YAxis 
             stroke="#8E9196"
             tick={{ fill: '#8E9196', fontSize: 12 }}
-            domain={['dataMin - 0.1', 'dataMax + 0.1']} 
+            domain={['dataMin - 0.1', 'dataMax + 0.1']}
+            orientation={dir === 'rtl' ? 'right' : 'left'}
           />
           <Tooltip 
             contentStyle={{ 
               backgroundColor: '#221F26', 
               borderColor: '#9b87f5',
-              color: '#fff' 
+              color: '#fff',
+              textAlign: dir === 'rtl' ? 'right' : 'left'
             }}
             labelStyle={{ color: '#fff' }}
           />

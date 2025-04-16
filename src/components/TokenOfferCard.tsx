@@ -3,12 +3,15 @@ import React from 'react';
 import { ExternalLink } from 'lucide-react';
 import { TokenOffer } from '@/data/jawaker-tokens';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface TokenOfferCardProps {
   offer: TokenOffer;
 }
 
 const TokenOfferCard: React.FC<TokenOfferCardProps> = ({ offer }) => {
+  const { t, dir } = useLanguage();
+
   return (
     <div className="flex flex-col bg-jawaker-charcoal rounded-lg overflow-hidden border border-white/10 hover:border-jawaker-purple/50 transition-all duration-300">
       <div className="p-4 flex flex-col h-full">
@@ -36,13 +39,13 @@ const TokenOfferCard: React.FC<TokenOfferCardProps> = ({ offer }) => {
         
         {/* Token Value */}
         <div className="mb-3">
-          <div className="text-sm text-jawaker-gray">Value</div>
-          <div className="text-xl font-bold text-white">{offer.tokenValue.toLocaleString()} tokens</div>
+          <div className="text-sm text-jawaker-gray">{t.offers.value}</div>
+          <div className="text-xl font-bold text-white">{offer.tokenValue.toLocaleString()} {t.offers.tokens}</div>
         </div>
         
         {/* Price */}
         <div className="mb-4">
-          <div className="text-sm text-jawaker-gray">Price</div>
+          <div className="text-sm text-jawaker-gray">{t.offers.price}</div>
           <div className="text-2xl font-bold text-gradient">
             {offer.price.currency}{offer.price.value.toFixed(2)}
           </div>
@@ -53,7 +56,7 @@ const TokenOfferCard: React.FC<TokenOfferCardProps> = ({ offer }) => {
           <Button 
             className="w-full bg-jawaker-purple hover:bg-jawaker-darkPurple flex items-center justify-center gap-1"
           >
-            Buy Now <ExternalLink className="w-4 h-4" />
+            {t.offers.buyNow} <ExternalLink className="w-4 h-4" />
           </Button>
         </div>
       </div>
