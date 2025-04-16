@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,15 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Custom colors for our application
+				jawaker: {
+					purple: '#9b87f5',
+					darkPurple: '#7E69AB',
+					darkBg: '#1A1F2C',
+					charcoal: '#221F26',
+					gray: '#8E9196',
+					lightGray: '#aaadb0',
 				}
 			},
 			borderRadius: {
